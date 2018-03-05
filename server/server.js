@@ -21,6 +21,16 @@ app.post('/todos', (req, res) => {
   });
 });
 
+app.get('/todos', (req, res) => {
+  Todo.find().then((todos) => {
+    res.send({todos});
+    console.log(`Saved to do: ${JSON.stringify(docs, undefined, 2)}`);
+  }, (e) => {
+    res.status(400).send(e);
+    console.log('Unable to save');
+  });
+});
+
 app.post('/users', (req, res) => {
   let newUser = new User({
     email: req.body.text
