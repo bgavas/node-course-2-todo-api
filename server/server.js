@@ -87,16 +87,14 @@ app.patch('/todos/:id', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  let newUser = new User({
-    email: req.body.text
-  });
-  newUser.save().then((docs) => {
-    res.send(docs);
-    // console.log(`Saved to do: ${JSON.stringify(docs, undefined, 2)}`);
-  }, (e) => {
-    res.status(400).send(e);
-    // console.log('Unable to save');
-  });
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => res.status(400).send(e));
 });
 
 app.listen(port, () => {
