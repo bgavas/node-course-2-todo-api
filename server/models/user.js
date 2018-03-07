@@ -37,6 +37,7 @@ var UserSchema = new mongoose.Schema({
 });
 
 
+// Do this before saving
 UserSchema.pre('save', function (next) {
   var user = this;
 
